@@ -247,3 +247,9 @@ def create_user():
         flash('Usuário criado com sucesso!', 'success')
         return redirect(url_for('main.users_list'))
     return render_template('create_user.html', title='Adicionar Novo Usuário', form=form)
+
+@main.route('/me')
+def me():
+    user_id = session['user']['id']
+    user = User.query.get_or_404(user_id)
+    return render_template('perfil.html', user=user)

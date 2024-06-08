@@ -1,70 +1,85 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil do Utilizador</title>
+    <title>Perfil</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/perfil.css') }}">
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #add8e6; /* Azul claro */
         }
         .container {
-            display: flex;
             width: 80%;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .left, .right {
+            margin: 50px auto;
+            background: #fff;
             padding: 20px;
-            flex: 1;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
         }
-        .left {
-            border-right: 1px solid #e0e0e0;
+        h1 {
+            text-align: center;
+            color: #333;
         }
-        h2 {
-            margin-top: 0;
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .info, .appointments {
+        .profile-info img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
             margin-bottom: 20px;
         }
-        .info div, .appointments div {
-            margin-bottom: 10px;
+        .profile-info h2 {
+            color: #4c74af;
+        }
+        .profile-info p {
+            color: #333;
+            font-size: 18px;
+            margin: 5px 0;
+        }
+        .profile-info .role {
+            font-weight: bold;
+            color: #3e778e;
+        }
+        .additional-info {
+            margin-top: 20px;
+        }
+        .additional-info h3 {
+            color: #4c74af;
+        }
+        .additional-info p {
+            font-size: 16px;
+            color: #333;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="left">
-            <h2>Dados Pessoais</h2>
-            <div class="info">
-                <div><strong>Nome Completo:</strong> {{ user['nome'] }}</div>
-                <div><strong>Email:</strong> {{ user['email'] }}</div>
-                <div><strong>Role:</strong> {{ user['role'] }}</div>
+        <h1>Perfil do Usuário</h1>
+        <div class="profile-info">
+
+            <h2>{{ user.nome }}</h2>
+            <p>Email: {{ user.email }}</p>
+            <p>Função: <span class="role">{{ user.role }}</span></p>
+            
+            {% if user.role == 'Utente' %}
+            <div class="additional-info">
+                <h3>Informações Adicionais</h3>
+                <p>Número do Cartão de Cidadão: {{ user.info.cc_number }}</p>
+                <p>Número de Utente de Saúde: {{ user.info.health_number }}</p>
+                <p>Género: {{ user.info.gender }}</p>
+                <p>Data de Nascimento: {{ user.info.birth_date }}</p>
+                <p>Peso: {{ user.info.weight }} kg</p>
+                <p>Altura: {{ user.info.height }} cm</p>
+                <p>IMC: {{ user.info.bmi }}</p>
             </div>
-        </div>
-        <div class="right">
-            <h2>Agendamentos e Histórico de Exames</h2>
-            <div class="appointments">
-                <h3>Agendamentos</h3>
-                {% for agendamento in agendamentos %}
-                    <div><strong>{{ agendamento.tipo }}:</strong> {{ agendamento.data }} às {{ agendamento.hora }}</div>
-                {% endfor %}
-            </div>
-            <div class="appointments">
-                <h3>Histórico de Exames</h3>
-                {% for exame in historico_exames %}
-                    <div><strong>{{ exame.tipo }}:</strong> Realizado em {{ exame.data }}</div>
-                {% endfor %}
-            </div>
+            {% endif %}
         </div>
     </div>
 </body>
