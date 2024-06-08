@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Agendamentos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #4c74af;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .edit-button, .create-button {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 4px;
+        }
+        .edit-button:hover, .create-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lista de Agendamentos</h1>
+        <a href="{{ url_for('main.create_agendamento') }}" class="create-button">Criar Agendamento</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome do Paciente</th>
+                    <th>Tipo de Exame</th>
+                    <th>Data</th>
+                    <th>Hora</th>
+                    <th>Médico</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for agendamento in agendamentos %}
+                <tr>
+                    <td>{{ agendamento.nome }}</td>
+                    <td>{{ agendamento.tipo }}</td>
+                    <td>{{ agendamento.data }}</td>
+                    <td>{{ agendamento.hora }}</td>
+                    <td>{{ agendamento.medico.nome }}</td>
+                    <td><a href="{{ url_for('main.edit_agendamento', agendamento_id=agendamento.id) }}" class="edit-button">Editar</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+        }
+        a {
+            text-decoration: none;
+            color: #4c74af;
+        }
+        a:hover {
+            color: #3e778e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard</h1>
+        <p>Bem-vindo, {{ user['nome'] }}!</p>
+        
+        {% if user['role'] == 'Administrador' %}
+        <h2>Administração</h2>
+        <ul>
+            <li><a href="{{ url_for('main.home') }}">Home</a></li>
+            <li><a href="{{ url_for('main.users_list') }}">Gerenciar Usuários</a></li>
+            <li><a href="{{ url_for('main.agendamentos_list') }}">Gerenciar Agendamentos</a></li>
+            <li><a href="{{ url_for('main.agendamentos_list') }}">Lista de Agendamentos</a></li>
+   
+        </ul>
+        {% endif %}
+        
+        {% if user['role'] == 'Rececionista' %}
+        <h2>Rececionista</h2>
+        <ul>
+            <li><a href="{{ url_for('main.create_agendamento') }}">Agendamento de Exames</a></li>
+            <li><a href="{{ url_for('main.agendamentos_list') }}">Lista de Agendamentos</a></li>
+            <!-- Mais opções para recepcionistas -->
+        </ul>
+        {% endif %}
+        
+        {% if user['role'] == 'Médico' %}
+        <h2>Médico</h2>
+        <ul>
+            <li><a href="{{ url_for('main.relatorio_raio_x') }}">Relatório de Exame de Raio-X</a></li>
+            <li><a href="{{ url_for('main.agendamentos_list') }}">Lista de Agendamentos</a></li>
+            <!-- Mais opções para médicos -->
+        </ul>
+        {% endif %}
+        
+        {% if user['role'] == 'TSDT' %}
+        <h2>TSDT</h2>
+        <ul>
+            <li><a href="{{ url_for('main.agendamentos_list') }}">Lista de Agendamentos</a></li>
+            <!-- Opções específicas para TSDT -->
+        </ul>
+        {% endif %}
+
+    </div>
+</body>
+</html>

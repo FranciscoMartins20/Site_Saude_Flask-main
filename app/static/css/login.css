@@ -1,0 +1,90 @@
+/* Reset de estilos padrões do navegador */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #e0e0e0; /* Fundo mais cinza */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+form {
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+p {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    text-align: left;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background: #ffdd57; /* Cor principal */
+    color: #333;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+input[type="submit"]:hover {
+    background: #e6c200; /* Sombra da cor principal */
+    color: #fff;
+}
+
+a {
+    color: #ffdd57; /* Cor principal */
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: #e6c200; /* Sombra da cor principal */
+    text-decoration: underline;
+}
+
+span[style="color: red;"] {
+    display: block;
+    margin-top: 5px;
+    color: #ff0000; /* Cor vermelha para mensagens de erro */
+}
+
+div {
+    margin-bottom: 20px;
+    color: #28a745; /* Cor verde para mensagens de sucesso */
+}

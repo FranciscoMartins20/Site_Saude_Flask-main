@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Novo Usuário</title>
+
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+    <script>
+        function toggleUserInfoFields() {
+            var roleSelect = document.getElementById('role');
+            var userInfoFields = document.getElementById('userInfoFields');
+            if (roleSelect.value === 'Utente') {
+                userInfoFields.classList.remove('hidden');
+            } else {
+                userInfoFields.classList.add('hidden');
+            }
+        }
+        window.onload = function() {
+            toggleUserInfoFields();  // Ensure correct state on page load
+        };
+    </script>
+</head>
+<body>
+    <form method="POST" action="">
+        <h2>Adicionar Novo Usuário</h2>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              <div>{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.nome.label }}<br>
+            {{ form.nome(size=32) }}<br>
+            {% for error in form.nome.errors %}
+              <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.email.label }}<br>
+            {{ form.email(size=32) }}<br>
+            {% for error in form.email.errors %}
+              <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.password.label }}<br>
+            {{ form.password(size=32) }}<br>
+            {% for error in form.password.errors %}
+              <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.confirm_password.label }}<br>
+            {{ form.confirm_password(size=32) }}<br>
+            {% for error in form.confirm_password.errors %}
+              <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.role.label }}<br>
+            {{ form.role(id='role', onchange="toggleUserInfoFields()") }}<br>
+            {% for error in form.role.errors %}
+              <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+
+        <div id="userInfoFields" class="hidden">
+            <h2>Informações Adicionais do Utente</h2>
+            <p>
+                {{ form.cc_number.label }}<br>
+                {{ form.cc_number(size=32) }}<br>
+                {% for error in form.cc_number.errors %}
+                  <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.health_number.label }}<br>
+                {{ form.health_number(size=32) }}<br>
+                {% for error in form.health_number.errors %}
+                  <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.gender.label }}<br>
+                {{ form.gender() }}<br>
+                {% for error in form.gender.errors %}
+                  <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.birth_date.label }}<br>
+                {{ form.birth_date() }}<br>
+                {% for error in form.birth_date.errors %}
+                  <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.weight.label }}<br>
+                {{ form.weight(size=32) }}<br>
+                {% for error in form.weight.errors %}
+                  <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.height.label }}<br>
+                {{ form.height(size=32) }}<br>
+                {% for error in form.height.errors %}
+                  <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.bmi.label }}<br>
+                {{ form.bmi(size=32) }}<br>
+                {% for error in form.bmi.errors %}
+                  <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+        </div>
+
+        <p>{{ form.submit() }}</p>
+        <a href="{{ url_for('main.users_list') }}" class="btn">Voltar à Lista de Usuários</a>
+    </form>
+</body>
+</html>

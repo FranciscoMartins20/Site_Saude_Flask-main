@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Usuários</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        a, button {
+            text-decoration: none;
+            color: #007BFF;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        a:hover, button:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border: 1px solid #007BFF;
+            background-color: #007BFF;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lista de Usuários</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.nome }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.role }}</td>
+                    <td>
+                        <a href="{{ url_for('main.user_detail', id=user.id) }}">Ver Detalhes</a> |
+                        <a href="{{ url_for('main.edit_user', id=user.id) }}">Editar</a> |
+                        <form action="{{ url_for('main.delete_user', id=user.id) }}" method="POST" style="display:inline;">
+                            {{ delete_form.hidden_tag() }}
+                            <button type="submit" onclick="return confirm('Tem certeza de que deseja deletar este usuário?');">Deletar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ url_for('main.create_user') }}" class="btn">Adicionar Novo Usuário</a>
+        <a href="{{ url_for('main.dashboard') }}" class="btn">Voltar ao Painel de Administração</a>
+    </div>
+</body>
+</html>

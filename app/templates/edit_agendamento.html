@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 50%;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 5px;
+            color: #333;
+        }
+        input, select {
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            background-color: #008CBA; /* Azul */
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #007bb5; /* Azul mais escuro */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ title }}</h1>
+        <form method="POST" action="{{ url_for('main.edit_agendamento', agendamento_id=agendamento.id) }}">
+            {{ form.hidden_tag() }}
+            <label for="utente">Utente:</label>
+            {{ form.utente() }}
+            
+            <label for="tipo">Tipo de Exame:</label>
+            {{ form.tipo() }}
+            
+            <label for="data">Data do Exame:</label>
+            {{ form.data() }}
+            
+            <label for="hora">Hora do Exame:</label>
+            {{ form.hora() }}
+            
+            <label for="medico">Médico:</label>
+            {{ form.medico() }}
+            
+            <input type="submit" value="Atualizar">
+        </form>
+    </div>
+</body>
+</html>

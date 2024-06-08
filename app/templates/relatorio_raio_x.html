@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Exame de Raio-X</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            border-bottom: 2px solid #000;
+            padding-bottom: 5px;
+        }
+        .info-table, .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .info-table td, .info-table th, .results-table td, .results-table th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .info-table th, .results-table th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+        .image-section {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .image-section img {
+            width: 300px;
+            height: auto;
+            border: 1px solid #ddd;
+            padding: 5px;
+        
+        }
+     
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Relatório de Exame de Raio-X</h1>
+        <p>Data: 21 de Maio de 2024</p>
+    </div>
+    
+    <div class="section">
+        <h2>Informações do Paciente</h2>
+        <table class="info-table">
+            <tr>
+                <th>Nome</th>
+                <td>Inês Furtado</td>
+            </tr>
+            <tr>
+                <th>Idade</th>
+                <td>25 anos</td>
+            </tr>
+            <tr>
+                <th>Género</th>
+                <td>Feminino</td>
+            </tr>
+            <tr>
+                <th>Identificação</th>
+                <td>ID123456</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="section">
+        <h2>Detalhes do Exame de Raio-X</h2>
+        <table class="info-table">
+            <tr>
+                <th>Tipo de Exame</th>
+                <td>Raio-X do Tórax</td>
+            </tr>
+            <tr>
+                <th>Data do Exame</th>
+                <td>20 de Maio de 2024</td>
+            </tr>
+            <tr>
+                <th>Médico Responsável</th>
+                <td>Dra. Tânia Matos</td>
+            </tr>
+            <tr>
+                <th>Descrição</th>
+                <td>Imagem de raio-X do tórax para avaliação de possíveis anormalidades pulmonares.</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="section image-section">
+        <h2>Imagem de Raio-X</h2>
+        <img src="{{  url_for('static', filename='assets/raiox.jpg') }}" alt="Imagem de Raio-X do Tórax">
+    </div>
+    
+    <div class="section">
+        <h2>Resultados</h2>
+        <table class="results-table">
+            <tr>
+                <th>Área Examinada</th>
+                <th>Resultado</th>
+                <th>Observações</th>
+            </tr>
+            <tr>
+                <td>Pulmões</td>
+                <td>Sem anormalidades</td>
+                <td>Os pulmões estão claros, sem sinais de infiltração ou massa.</td>
+            </tr>
+            <tr>
+                <td>Coração</td>
+                <td>Normal</td>
+                <td>Tamanho e forma do coração dentro dos limites normais.</td>
+            </tr>
+            <tr>
+                <td>Costelas</td>
+                <td>Intactas</td>
+                <td>Não foram observadas fraturas ou lesões nas costelas.</td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="section">
+        <h2>Observações</h2>
+        <p>O exame de raio-X do tórax não revelou anormalidades significativas. Recomenda-se acompanhamento regular e nova avaliação em caso de sintomas persistentes ou agravamento.</p>
+    </div>
+    
+    <div class="section">
+        <h2>Assinatura</h2>
+        <p>Dra. Tânia Matos</p>
+        <p>Médica Radiologista</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/home.css') }}">
+    <style>
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            color: #fff;
+            background-color: #4c74af;
+            border: none;
+            border-radius: 15px;
+        }
+        .button:hover {
+            background-color: #3e778e;
+        }
+        .button:active {
+            background-color: #4146a3;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>ISEP-X</h1>
+            <nav>
+                <ul>
+                    {% if user %}
+                    <li><span>Olá, {{ user['nome'] }}!</span></li>
+                    {% if user['role'] == 'Administrador' %}
+                    <li><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+           
+                    {% endif %}
+                    {% if user['role'] == 'Rececionista' %}
+                    <li><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+                    {% endif %}
+                    {% if user['role'] == 'Médico' %}
+                    <li><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+                    {% endif %}
+                    {% if user['role'] == 'TSDT' %}
+                    <li><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+                    {% endif %}
+                    {% if user['role'] == 'Utente' %}
+                    <li><a class="button" href="{{ url_for('main.perfil') }}">Meu Perfil</a></li>
+                    {% endif %}
+                    <li><a class="button" href="{{ url_for('main.logout') }}">Logout</a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('main.register') }}">Register</a></li>
+                    <li><a href="{{ url_for('main.login') }}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <video autoplay muted loop id="heroVideo">
+                <source src="{{ url_for('static', filename='assets/4352120-hd_1920_1080_25fps.mp4') }}" type="video/mp4">
+            </video>
+            <div class="hero-content">
+                <h2>Bem vindos à plataforma ISEP-X</h2>
+                <p>Tecnologia que faz a diferença!</p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

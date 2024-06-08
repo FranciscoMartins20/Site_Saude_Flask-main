@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Utilizador</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #add8e6; /* Azul claro */
+        }
+        .container {
+            display: flex;
+            width: 80%;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .left, .right {
+            padding: 20px;
+            flex: 1;
+        }
+        .left {
+            border-right: 1px solid #e0e0e0;
+        }
+        h2 {
+            margin-top: 0;
+        }
+        .info, .appointments {
+            margin-bottom: 20px;
+        }
+        .info div, .appointments div {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <h2>Dados Pessoais</h2>
+            <div class="info">
+                <div><strong>Nome Completo:</strong> {{ user['nome'] }}</div>
+                <div><strong>Email:</strong> {{ user['email'] }}</div>
+                <div><strong>Role:</strong> {{ user['role'] }}</div>
+            </div>
+        </div>
+        <div class="right">
+            <h2>Agendamentos e Histórico de Exames</h2>
+            <div class="appointments">
+                <h3>Agendamentos</h3>
+                {% for agendamento in agendamentos %}
+                    <div><strong>{{ agendamento.tipo }}:</strong> {{ agendamento.data }} às {{ agendamento.hora }}</div>
+                {% endfor %}
+            </div>
+            <div class="appointments">
+                <h3>Histórico de Exames</h3>
+                {% for exame in historico_exames %}
+                    <div><strong>{{ exame.tipo }}:</strong> Realizado em {{ exame.data }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
