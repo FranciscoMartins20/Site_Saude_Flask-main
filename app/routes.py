@@ -51,7 +51,7 @@ def login():
             if session['user']['role'] == 'Utente':
                 return redirect(url_for('main.home'))
             else:
-                return redirect(url_for('main.dashboard'))
+                return redirect(url_for('main.home'))
         else:
             flash('Login falhou. Verifique o nome de utilizador e a senha', 'danger')
     return render_template('login.html', title='Login', form=form)
@@ -122,6 +122,7 @@ def agendamentos_list():
     ).join(utente_alias, Agendamento.user_id == utente_alias.id).join(medico_alias, Agendamento.medico_id == medico_alias.id).all()
     return render_template('agendamentos_list.html', agendamentos=agendamentos)
 
+
 @main.route('/perfil')
 @roles_required('Utente')
 def perfil():
@@ -140,24 +141,31 @@ def dashboard():
     return render_template('dashboard.html', user=user)
 
 @main.route('/userslist')
-@roles_required('Administrador')
+@roles_required('Administrador', 'Rececionista')
 def users_list():
-    users = User.query.all()
+    if session['user']['role'] == 'Rececionista':
+        users = db.session.query(User, UserInfo).outerjoin(UserInfo, User.id == UserInfo.user_id).filter(User.role == 'Utente').all()
+    else:
+        users = db.session.query(User, UserInfo).outerjoin(UserInfo, User.id == UserInfo.user_id).all()
+    
     delete_form = DeleteUserForm()
     create_form = AdminCreateUserForm()
     return render_template('users_list.html', users=users, delete_form=delete_form, create_form=create_form)
 
+
+
 @main.route('/user/<int:id>')
-@roles_required('Administrador')
+@roles_required('Administrador', 'Rececionista')
 def user_detail(id):
     user = User.query.get_or_404(id)
-    return render_template('user_detail.html', user=user)
+    delete_form = DeleteUserForm()
+    return render_template('user_detail.html', user=user, delete_form=delete_form)
 
 @main.route('/user/<int:id>/edit', methods=['GET', 'POST'])
-@roles_required('Administrador')
+@roles_required('Administrador', 'Rececionista')
 def edit_user(id):
     user = User.query.get_or_404(id)
-    form = UpdateUserForm()
+    form = UpdateUserForm(obj=user)
     if form.validate_on_submit():
         try:
             user.nome = form.nome.data
@@ -221,16 +229,17 @@ def delete_user(id):
     return redirect(url_for('main.users_list'))
 
 @main.route('/create_user', methods=['GET', 'POST'])
-@roles_required('Administrador')
+@roles_required('Administrador', 'Rececionista')
 def create_user():
     form = AdminCreateUserForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(nome=form.nome.data, email=form.email.data, password=hashed_password, role=form.role.data)
+        role = form.role.data if session['user']['role'] == 'Administrador' else 'Utente'
+        user = User(nome=form.nome.data, email=form.email.data, password=hashed_password, role=role)
         db.session.add(user)
         db.session.commit()
 
-        if form.role.data == 'Utente':
+        if role == 'Utente':
             user_info = UserInfo(
                 user_id=user.id,
                 cc_number=form.cc_number.data,
@@ -249,6 +258,7 @@ def create_user():
     return render_template('create_user.html', title='Adicionar Novo Usuário', form=form)
 
 @main.route('/me')
+@roles_required('Utente', 'Administrador', 'Rececionista', 'Médico', 'TSDT')
 def me():
     user_id = session['user']['id']
     user = User.query.get_or_404(user_id)

@@ -68,13 +68,13 @@ class UpdateUserForm(FlaskForm):
     ], validators=[DataRequired()])
 
     # Campos extras para Utente
-    cc_number = StringField('Número do Cartão de Cidadão', validators=[Optional()])
-    health_number = StringField('Número de Utente de Saúde', validators=[Optional()])
-    gender = SelectField('Género', choices=[('M', 'Masculino'), ('F', 'Feminino')], validators=[Optional()])
-    birth_date = DateField('Data de Nascimento', format='%Y-%m-%d', validators=[Optional()])
-    weight = FloatField('Peso', validators=[Optional()])
-    height = FloatField('Altura', validators=[Optional()])
-    bmi = FloatField('IMC', validators=[Optional()])
+    cc_number = StringField('Número do Cartão de Cidadão')
+    health_number = StringField('Número de Utente de Saúde')
+    gender = SelectField('Género', choices=[('M', 'Masculino'), ('F', 'Feminino')])
+    birth_date = DateField('Data de Nascimento', format='%Y-%m-%d')
+    weight = FloatField('Peso')
+    height = FloatField('Altura')
+    bmi = FloatField('IMC')
 
     submit = SubmitField('Atualizar')
 

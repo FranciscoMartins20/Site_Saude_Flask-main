@@ -48,7 +48,6 @@
         <ul>
             <li><a href="{{ url_for('main.home') }}">Home</a></li>
             <li><a href="{{ url_for('main.users_list') }}">Gerenciar Usuários</a></li>
-            <li><a href="{{ url_for('main.agendamentos_list') }}">Gerenciar Agendamentos</a></li>
             <li><a href="{{ url_for('main.agendamentos_list') }}">Lista de Agendamentos</a></li>
             <li><a href="{{ url_for('main.me') }}">Perfil</a></li>
    
@@ -58,8 +57,10 @@
         {% if user['role'] == 'Rececionista' %}
         <h2>Rececionista</h2>
         <ul>
+            <li><a href="{{ url_for('main.home') }}">Home</a></li>
             <li><a href="{{ url_for('main.create_agendamento') }}">Agendamento de Exames</a></li>
             <li><a href="{{ url_for('main.agendamentos_list') }}">Lista de Agendamentos</a></li>
+            <li><a href="{{ url_for('main.users_list') }}">Gerenciar Usuários</a></li>
             <!-- Mais opções para recepcionistas -->
         </ul>
         {% endif %}

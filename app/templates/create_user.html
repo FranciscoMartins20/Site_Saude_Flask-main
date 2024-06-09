@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adicionar Novo Usuário</title>
-
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/create_user.css') }}">
     <style>
         .hidden {
             display: none;
@@ -64,6 +64,7 @@
               <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
+        {% if session['user']['role'] == 'Administrador' %}
         <p>
             {{ form.role.label }}<br>
             {{ form.role(id='role', onchange="toggleUserInfoFields()") }}<br>
@@ -71,8 +72,11 @@
               <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
+        {% else %}
+        <input type="hidden" name="role" value="Utente">
+        {% endif %}
 
-        <div id="userInfoFields" class="hidden">
+        <div id="userInfoFields" >
             <h2>Informações Adicionais do Utente</h2>
             <p>
                 {{ form.cc_number.label }}<br>
