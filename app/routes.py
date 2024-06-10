@@ -3,6 +3,7 @@ from app import db, bcrypt
 from app.models import User, UserInfo, Agendamento
 from app.forms import UserRegistrationForm, AdminCreateUserForm, LoginForm, UpdateUserForm, DeleteUserForm, AgendamentoForm
 from functools import wraps
+from datetime import time
 
 main = Blueprint('main', __name__)
 
@@ -73,12 +74,26 @@ def create_agendamento():
     form = AgendamentoForm()
     form.utente.choices = [(user.id, user.nome) for user in User.query.filter_by(role='Utente').all()]
     form.medico.choices = [(user.id, user.nome) for user in User.query.filter_by(role='Médico').all()]
+
     if form.validate_on_submit():
+        hora = time.fromisoformat(form.hora.data)
+        
+        # Verificar se já existe um agendamento para o mesmo médico na mesma data e hora
+        existing_agendamento = Agendamento.query.filter_by(
+            medico_id=form.medico.data,
+            data=form.data.data,
+            hora=hora
+        ).first()
+        
+        if existing_agendamento:
+            flash('O médico já tem um agendamento nesse horário.', 'danger')
+            return redirect(url_for('main.create_agendamento'))
+        
         agendamento = Agendamento(
             user_id=form.utente.data,
             tipo=form.tipo.data,
             data=form.data.data,
-            hora=form.hora.data,
+            hora=hora,
             medico_id=form.medico.data
         )
         db.session.add(agendamento)
@@ -86,6 +101,7 @@ def create_agendamento():
         flash('Agendamento criado com sucesso!', 'success')
         return redirect(url_for('main.agendamentos_list'))
     return render_template('agendamento.html', title='Agendamento de Exames de Radiologia', form=form)
+
 
 @main.route('/agendamento/<int:agendamento_id>/edit', methods=['GET', 'POST'])
 @roles_required('Administrador', 'Rececionista')
@@ -96,10 +112,11 @@ def edit_agendamento(agendamento_id):
     form.medico.choices = [(user.id, user.nome) for user in User.query.filter_by(role='Médico').all()]
     
     if form.validate_on_submit():
+        hora = time.fromisoformat(form.hora.data)  # Converte a string de hora para um objeto time
         agendamento.user_id = form.utente.data
         agendamento.tipo = form.tipo.data
         agendamento.data = form.data.data
-        agendamento.hora = form.hora.data
+        agendamento.hora = hora  # Use o objeto time
         agendamento.medico_id = form.medico.data
         db.session.commit()
         flash('Agendamento atualizado com sucesso!', 'success')

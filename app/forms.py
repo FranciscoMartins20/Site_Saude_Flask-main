@@ -88,7 +88,7 @@ class AgendamentoForm(FlaskForm):
         ('ressonancia', 'Ressonância Magnética')
     ], validators=[DataRequired()])
     data = DateField('Data do Exame', format='%Y-%m-%d', validators=[DataRequired()])
-    hora = TimeField('Hora do Exame', format='%H:%M', validators=[DataRequired()])
+    hora = SelectField('Hora', choices=[(f'{h:02}:00', f'{h:02}:00') for h in range(9, 19)], validators=[DataRequired()])
     medico = SelectField('Médico', coerce=int, validators=[DataRequired()])
     submit = SubmitField('Agendar')
 

@@ -1,0 +1,110 @@
+/* Reset some default browser styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* General body styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Container for the dashboard */
+.container {
+    max-width: 1200px;
+    margin: 50px auto;
+    background: #fff;
+    padding: 20px 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+/* Header styles */
+h1 {
+    font-size: 2.5em;
+    color: #34495e;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #4c74af;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 1.8em;
+    color: #4c74af;
+    margin: 20px 0 10px;
+}
+
+/* List styles */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin: 10px 0;
+}
+
+a {
+    text-decoration: none;
+    color: #4c74af;
+    font-weight: bold;
+    display: inline-block;
+    padding: 10px 20px;
+    border: 2px solid #4c74af;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+}
+
+a:hover {
+    background-color: #4c74af;
+    color: #fff;
+}
+
+/* Button styles */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    border: 2px solid #007BFF;
+    background-color: #007BFF;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Flexbox for responsive layout */
+.flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.flex > div {
+    flex: 1;
+    margin: 10px;
+}
+
+/* Additional utility classes */
+.text-center {
+    text-align: center;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
