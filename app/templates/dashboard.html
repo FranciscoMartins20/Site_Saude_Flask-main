@@ -17,6 +17,7 @@
             <li><a href="{{ url_for('main.home') }}">Home</a></li>
             <li><a href="{{ url_for('main.users_list') }}">Gerenciar Usuários</a></li>
             <li><a href="{{ url_for('main.agendamentos_list') }}">Lista de Agendamentos</a></li>
+            <li><a href="{{ url_for('main.relatorios_list') }}">Lista de Relatórios</a></li>
             <li><a href="{{ url_for('main.me') }}">Perfil</a></li>
         </ul>
         {% endif %}
@@ -36,6 +37,7 @@
         <ul>
             <li><a href="{{ url_for('main.relatorio_raio_x') }}">Relatório de Exame de Raio-X</a></li>
             <li><a href="{{ url_for('main.agendamentos_list') }}">Lista de Agendamentos</a></li>
+            <li><a href="{{ url_for('main.relatorios_list') }}">Lista de Relatórios</a></li>
         </ul>
         {% endif %}
         

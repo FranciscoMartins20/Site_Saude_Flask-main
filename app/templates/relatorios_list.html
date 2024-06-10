@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Relatórios de Raio-X</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Lista de Relatórios de Raio-X</h1>
+        <a href="{{ url_for('main.create_relatorio') }}" class="add-button">Adicionar Novo Relatório</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tipo de Exame</th>
+                    <th>Data do Exame</th>
+                    <th>Paciente</th>
+                    <th>Médico</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for relatorio in relatorios %}
+                <tr>
+                    <td>{{ relatorio.id }}</td>
+                    <td>{{ relatorio.tipo_exame }}</td>
+                    <td>{{ relatorio.data_exame }}</td>
+                    <td>{{ relatorio.paciente.user.nome }}</td>
+                    <td>{{ relatorio.medico.nome }}</td>
+                    <td>
+                        <a href="{{ url_for('main.relatorio_detail', id=relatorio.id) }}">Ver Detalhes</a> |
+                        <a href="{{ url_for('main.edit_relatorio', id=relatorio.id) }}">Editar</a> |
+                        <form action="{{ url_for('main.delete_relatorio', id=relatorio.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" onclick="return confirm('Tem certeza de que deseja deletar este relatório?');">Deletar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

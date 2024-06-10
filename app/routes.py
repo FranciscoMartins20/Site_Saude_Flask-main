@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, session, request
+from flask import Blueprint, jsonify, render_template, redirect, url_for, flash, session, request
 from app import db, bcrypt
-from app.models import User, UserInfo, Agendamento
-from app.forms import UserRegistrationForm, AdminCreateUserForm, LoginForm, UpdateUserForm, DeleteUserForm, AgendamentoForm
+from app.models import User, UserInfo, Agendamento, RelatorioRaioX, Resultado
+from app.forms import UserRegistrationForm, AdminCreateUserForm, LoginForm, UpdateUserForm, DeleteUserForm, AgendamentoForm, RelatorioForm
 from functools import wraps
 from datetime import time
 
@@ -169,8 +169,6 @@ def users_list():
     create_form = AdminCreateUserForm()
     return render_template('users_list.html', users=users, delete_form=delete_form, create_form=create_form)
 
-
-
 @main.route('/user/<int:id>')
 @roles_required('Administrador', 'Rececionista')
 def user_detail(id):
@@ -280,3 +278,111 @@ def me():
     user_id = session['user']['id']
     user = User.query.get_or_404(user_id)
     return render_template('perfil.html', user=user)
+
+# Rotas para relatórios de Raio-X
+@main.route('/relatorios')
+@roles_required('Administrador', 'Médico')
+def relatorios_list():
+    relatorios = RelatorioRaioX.query.all()
+    return render_template('relatorios_list.html', relatorios=relatorios)
+
+@main.route('/relatorio/<int:id>')
+@roles_required('Administrador', 'Médico')
+def relatorio_detail(id):
+    relatorio = RelatorioRaioX.query.get_or_404(id)
+    return render_template('relatorio_detail.html', relatorio=relatorio)
+
+@main.route('/create_relatorio', methods=['GET', 'POST'])
+@roles_required('Administrador', 'Médico')
+def create_relatorio():
+    form = RelatorioForm()
+    form.paciente.choices = [(user.user_id, user.user.nome) for user in UserInfo.query.all()]
+    form.medico.choices = [(user.id, user.nome) for user in User.query.filter_by(role='Médico').all()]
+    if form.validate_on_submit():
+        relatorio = RelatorioRaioX(
+            tipo_exame=form.tipo_exame.data,
+            data_exame=form.data_exame.data,
+            descricao=form.descricao.data,
+            imagem_url=form.imagem_url.data,
+            paciente_id=form.paciente.data,
+            medico_id=form.medico.data
+        )
+        db.session.add(relatorio)
+        db.session.commit()
+        for resultado in form.resultados.entries:
+            resultado_obj = Resultado(
+                area_examinada=resultado.data['area_examinada'],
+                resultado=resultado.data['resultado'],
+                observacoes=resultado.data['observacoes'],
+                relatorio_id=relatorio.id
+            )
+            db.session.add(resultado_obj)
+        db.session.commit()
+        flash('Relatório criado com sucesso!', 'success')
+        return redirect(url_for('main.relatorios_list'))
+    return render_template('create_relatorio.html', title='Adicionar Relatório de Raio-X', form=form)
+
+@main.route('/relatorio/<int:id>/edit', methods=['GET', 'POST'])
+@roles_required('Administrador', 'Médico')
+def edit_relatorio(id):
+    relatorio = RelatorioRaioX.query.get_or_404(id)
+    form = RelatorioForm(obj=relatorio)
+    form.paciente.choices = [(user.user_id, user.user.nome) for user in UserInfo.query.all()]
+    form.medico.choices = [(user.id, user.nome) for user in User.query.filter_by(role='Médico').all()]
+    if form.validate_on_submit():
+        relatorio.tipo_exame = form.tipo_exame.data
+        relatorio.data_exame = form.data_exame.data
+        relatorio.descricao = form.descricao.data
+        relatorio.imagem_url = form.imagem_url.data
+        relatorio.paciente_id = form.paciente.data
+        relatorio.medico_id = form.medico.data
+        db.session.commit()
+        # Update resultados
+        for resultado in form.resultados.entries:
+            resultado_obj = Resultado.query.get(resultado.data['id'])
+            if resultado_obj:
+                resultado_obj.area_examinada = resultado.data['area_examinada']
+                resultado_obj.resultado = resultado.data['resultado']
+                resultado_obj.observacoes = resultado.data['observacoes']
+            else:
+                resultado_obj = Resultado(
+                    area_examinada=resultado.data['area_examinada'],
+                    resultado=resultado.data['resultado'],
+                    observacoes=resultado.data['observacoes'],
+                    relatorio_id=relatorio.id
+                )
+                db.session.add(resultado_obj)
+        db.session.commit()
+        flash('Relatório atualizado com sucesso!', 'success')
+        return redirect(url_for('main.relatorios_list'))
+    return render_template('edit_relatorio.html', title='Editar Relatório de Raio-X', form=form, relatorio=relatorio)
+
+@main.route('/relatorio/<int:id>/delete', methods=['POST'])
+@roles_required('Administrador', 'Médico')
+def delete_relatorio(id):
+    relatorio = RelatorioRaioX.query.get_or_404(id)
+    try:
+        db.session.delete(relatorio)
+        db.session.commit()
+        flash('Relatório deletado com sucesso.', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Erro ao deletar o relatório: {str(e)}', 'danger')
+    return redirect(url_for('main.relatorios_list'))
+
+@main.route('/relatorios/<int:user_id>')
+@roles_required('Administrador', 'Médico')
+def relatorios_by_user(user_id):
+    relatorios = RelatorioRaioX.query.filter_by(paciente_id=user_id).all()
+    return render_template('relatorios_list.html', relatorios=relatorios)
+
+@main.route('/api/user/<int:user_id>/agendamentos', methods=['GET'])
+@roles_required('Administrador', 'Médico')
+def api_user_agendamentos(user_id):
+    agendamentos = Agendamento.query.filter_by(user_id=user_id).all()
+    agendamentos_data = [{
+        'tipo': agendamento.tipo,
+        'data': agendamento.data.strftime('%Y-%m-%d'),
+        'descricao': f'{agendamento.tipo} agendado para {agendamento.data.strftime("%d/%m/%Y")} às {agendamento.hora.strftime("%H:%M")}'
+    } for agendamento in agendamentos]
+    return jsonify(agendamentos_data)

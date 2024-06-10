@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Relatório de Raio-X</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Detalhes do Relatório de Raio-X</h1>
+        <table class="info-table">
+            <tr>
+                <th>Tipo de Exame</th>
+                <td>{{ relatorio.tipo_exame }}</td>
+            </tr>
+            <tr>
+                <th>Data do Exame</th>
+                <td>{{ relatorio.data_exame }}</td>
+            </tr>
+            <tr>
+                <th>Descrição</th>
+                <td>{{ relatorio.descricao }}</td>
+            </tr>
+            <tr>
+                <th>Imagem</th>
+                <td>
+                    {% if relatorio.imagem_url %}
+                    <img src="{{ relatorio.imagem_url }}" alt="Imagem de Raio-X">
+                    {% else %}
+                    Nenhuma imagem disponível.
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Paciente</th>
+                <td>{{ relatorio.paciente.user.nome }}</td>
+            </tr>
+            <tr>
+                <th>Médico</th>
+                <td>{{ relatorio.medico.nome }}</td>
+            </tr>
+        </table>
+        
+        <h2>Resultados</h2>
+        <table class="results-table">
+            <tr>
+                <th>Área Examinada</th>
+                <th>Resultado</th>
+                <th>Observações</th>
+            </tr>
+            {% for resultado in relatorio.resultados %}
+            <tr>
+                <td>{{ resultado.area_examinada }}</td>
+                <td>{{ resultado.resultado }}</td>
+                <td>{{ resultado.observacoes }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        
+        <a href="{{ url_for('main.edit_relatorio', id=relatorio.id) }}" class="btn">Editar</a>
+        <form action="{{ url_for('main.delete_relatorio', id=relatorio.id) }}" method="POST" style="display:inline;">
+            <button type="submit" class="btn" onclick="return confirm('Tem certeza de que deseja deletar este relatório?');">Deletar</button>
+        </form>
+        <a href="{{ url_for('main.relatorios_list') }}" class="btn">Voltar à Lista de Relatórios</a>
+    </div>
+</body>
+</html>
