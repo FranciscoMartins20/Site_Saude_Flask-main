@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <h1>Criar Relatório de Raio-X</h1>
-        <form method="POST" action="{{ url_for('main.create_relatorio') }}">
+        <form method="POST" action="{{ url_for('main.create_relatorio') }}" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             <div class="form-group">
                 {{ form.paciente.label }}<br>
@@ -38,17 +38,14 @@
             <h2>Resultados</h2>
             <div id="resultados">
                 {% for resultado in form.resultados %}
-                <div class="form-group">
+                <div class="form-group resultado-item">
                     {{ resultado.area_examinada.label }}<br>
                     {{ resultado.area_examinada(class="form-control") }}
-                </div>
-                <div class="form-group">
                     {{ resultado.resultado.label }}<br>
                     {{ resultado.resultado(class="form-control") }}
-                </div>
-                <div class="form-group">
                     {{ resultado.observacoes.label }}<br>
                     {{ resultado.observacoes(class="form-control") }}
+                    <button type="button" class="btn remove-resultado">Remover</button>
                 </div>
                 {% endfor %}
             </div>

@@ -1,51 +1,82 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+/* Reset CSS */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
 .container {
     width: 80%;
-    margin: 50px auto;
+    margin: 20px auto;
     background: #fff;
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 }
+
 h1 {
-    text-align: center;
-    color: #333;
-}
-.profile-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.profile-info img {
-    border-radius: 50%;
-    width: 150px;
-    height: 150px;
+    font-size: 2.5em;
+    color: #007BFF;
     margin-bottom: 20px;
+    border-bottom: 2px solid #007BFF;
+    padding-bottom: 10px;
 }
-.profile-info h2 {
-    color: #4c74af;
+
+p {
+    font-size: 1.2em;
+    margin-bottom: 10px;
 }
-.profile-info p {
+
+h2 {
+    font-size: 2em;
     color: #333;
-    font-size: 18px;
-    margin: 5px 0;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
 }
-.profile-info .role {
-    font-weight: bold;
-    color: #3e778e;
+
+ul {
+    list-style-type: none;
 }
-.additional-info {
-    margin-top: 20px;
+
+ul li {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
 }
-.additional-info h3 {
-    color: #4c74af;
+
+ul li a {
+    color: #007BFF;
+    text-decoration: none;
 }
-.additional-info p {
-    font-size: 16px;
-    color: #333;
+
+ul li a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+
+    p, ul li {
+        font-size: 1em;
+    }
 }

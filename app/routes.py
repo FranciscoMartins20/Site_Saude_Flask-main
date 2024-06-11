@@ -4,6 +4,11 @@ from app.models import User, UserInfo, Agendamento, RelatorioRaioX, Resultado
 from app.forms import UserRegistrationForm, AdminCreateUserForm, LoginForm, UpdateUserForm, DeleteUserForm, AgendamentoForm, RelatorioForm
 from functools import wraps
 from datetime import time
+from werkzeug.utils import secure_filename
+import os
+from flask import make_response
+import pdfkit
+
 
 main = Blueprint('main', __name__)
 
@@ -125,7 +130,7 @@ def edit_agendamento(agendamento_id):
     return render_template('edit_agendamento.html', title='Editar Agendamento', form=form, agendamento=agendamento)
 
 @main.route('/agendamentos')
-@roles_required('Administrador', 'Rececionista')
+@roles_required('Administrador', 'Rececionista', 'Médico', 'TSDT')
 def agendamentos_list():
     utente_alias = db.aliased(User)
     medico_alias = db.aliased(User)
@@ -137,19 +142,18 @@ def agendamentos_list():
         Agendamento.hora, 
         medico_alias.nome.label('medico_nome')
     ).join(utente_alias, Agendamento.user_id == utente_alias.id).join(medico_alias, Agendamento.medico_id == medico_alias.id).all()
-    return render_template('agendamentos_list.html', agendamentos=agendamentos)
-
+    return render_template('agendamentos_list.html', agendamentos=agendamentos, user=session.get('user'))
 
 @main.route('/perfil')
 @roles_required('Utente')
 def perfil():
-    user = session['user']
-    agendamentos = Agendamento.query.filter_by(user_id=user['id']).all()
-    historico_exames = [
-        {'tipo': 'RX Tórax', 'data': '10/01/2023'},
-        {'tipo': 'Tomografia Computadorizada', 'data': '05/08/2023'}
-    ]
+    user_id = session['user']['id']
+    user = User.query.get_or_404(user_id)
+    agendamentos = Agendamento.query.filter_by(user_id=user_id).all()
+    historico_exames = RelatorioRaioX.query.filter_by(paciente_id=user_id).all()
+    
     return render_template('perfil.html', user=user, agendamentos=agendamentos, historico_exames=historico_exames)
+
 
 @main.route('/dashboard')
 @roles_required('Administrador', 'Rececionista', 'Médico', 'TSDT')
@@ -279,19 +283,16 @@ def me():
     user = User.query.get_or_404(user_id)
     return render_template('perfil.html', user=user)
 
-# Rotas para relatórios de Raio-X
 @main.route('/relatorios')
-@roles_required('Administrador', 'Médico')
+@roles_required('Administrador', 'Médico', 'TSDT')
 def relatorios_list():
     relatorios = RelatorioRaioX.query.all()
-    return render_template('relatorios_list.html', relatorios=relatorios)
+    user = session.get('user')
+    return render_template('relatorios_list.html', relatorios=relatorios, user=user)
 
-@main.route('/relatorio/<int:id>')
-@roles_required('Administrador', 'Médico')
-def relatorio_detail(id):
-    relatorio = RelatorioRaioX.query.get_or_404(id)
-    return render_template('relatorio_detail.html', relatorio=relatorio)
 
+
+# Create Relatório Route
 @main.route('/create_relatorio', methods=['GET', 'POST'])
 @roles_required('Administrador', 'Médico')
 def create_relatorio():
@@ -299,11 +300,14 @@ def create_relatorio():
     form.paciente.choices = [(user.user_id, user.user.nome) for user in UserInfo.query.all()]
     form.medico.choices = [(user.id, user.nome) for user in User.query.filter_by(role='Médico').all()]
     if form.validate_on_submit():
+        filename = None
+        if form.imagem_url.data:
+            filename = save_image(form.imagem_url.data)
         relatorio = RelatorioRaioX(
             tipo_exame=form.tipo_exame.data,
             data_exame=form.data_exame.data,
             descricao=form.descricao.data,
-            imagem_url=form.imagem_url.data,
+            imagem_url=filename,
             paciente_id=form.paciente.data,
             medico_id=form.medico.data
         )
@@ -322,6 +326,7 @@ def create_relatorio():
         return redirect(url_for('main.relatorios_list'))
     return render_template('create_relatorio.html', title='Adicionar Relatório de Raio-X', form=form)
 
+
 @main.route('/relatorio/<int:id>/edit', methods=['GET', 'POST'])
 @roles_required('Administrador', 'Médico')
 def edit_relatorio(id):
@@ -333,7 +338,9 @@ def edit_relatorio(id):
         relatorio.tipo_exame = form.tipo_exame.data
         relatorio.data_exame = form.data_exame.data
         relatorio.descricao = form.descricao.data
-        relatorio.imagem_url = form.imagem_url.data
+        if form.imagem_url.data:
+            filename = save_image(form.imagem_url.data)
+            relatorio.imagem_url = filename
         relatorio.paciente_id = form.paciente.data
         relatorio.medico_id = form.medico.data
         db.session.commit()
@@ -357,6 +364,7 @@ def edit_relatorio(id):
         return redirect(url_for('main.relatorios_list'))
     return render_template('edit_relatorio.html', title='Editar Relatório de Raio-X', form=form, relatorio=relatorio)
 
+
 @main.route('/relatorio/<int:id>/delete', methods=['POST'])
 @roles_required('Administrador', 'Médico')
 def delete_relatorio(id):
@@ -376,13 +384,78 @@ def relatorios_by_user(user_id):
     relatorios = RelatorioRaioX.query.filter_by(paciente_id=user_id).all()
     return render_template('relatorios_list.html', relatorios=relatorios)
 
-@main.route('/api/user/<int:user_id>/agendamentos', methods=['GET'])
-@roles_required('Administrador', 'Médico')
-def api_user_agendamentos(user_id):
-    agendamentos = Agendamento.query.filter_by(user_id=user_id).all()
-    agendamentos_data = [{
-        'tipo': agendamento.tipo,
-        'data': agendamento.data.strftime('%Y-%m-%d'),
-        'descricao': f'{agendamento.tipo} agendado para {agendamento.data.strftime("%d/%m/%Y")} às {agendamento.hora.strftime("%H:%M")}'
-    } for agendamento in agendamentos]
-    return jsonify(agendamentos_data)
+@main.route('/api/paciente/<int:paciente_id>/agendamentos')
+def api_paciente_agendamentos(paciente_id):
+    agendamentos = Agendamento.query.filter_by(user_id=paciente_id).all()
+    agendamentos_data = [{'tipo': agendamento.tipo, 'data': agendamento.data.strftime('%Y-%m-%d'), 'hora': agendamento.hora.strftime('%H:%M')} for agendamento in agendamentos]
+    return jsonify({'agendamentos': agendamentos_data})
+
+
+def save_image(file):
+    if file and file.filename != '':
+        filename = secure_filename(file.filename)
+        filepath = os.path.join('app/static/assets', filename)
+        file.save(filepath)
+        return filename
+    return None
+
+@main.route('/relatorio/<int:id>')
+@roles_required('Utente', 'Administrador', 'Médico', 'TSDT')
+def relatorio_detail(id):
+    relatorio = RelatorioRaioX.query.get_or_404(id)
+    user_id = session['user']['id']
+    user = User.query.get_or_404(user_id)
+    return render_template('relatorio_detail.html', relatorio=relatorio, user=user)
+
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from io import BytesIO
+from flask import send_file
+
+@main.route('/relatorio/<int:id>/export_pdf')
+@roles_required('Utente', 'Administrador', 'Médico', 'TSDT')
+def export_relatorio_pdf(id):
+    relatorio = RelatorioRaioX.query.get_or_404(id)
+    user_role = session['user']['role']
+    user_id = session['user']['id']
+
+    # Verificar se o usuário tem permissão para ver este relatório
+    if user_role == 'Utente' and relatorio.paciente_id != user_id:
+        flash('Você não tem permissão para exportar este relatório.', 'danger')
+        return redirect(url_for('main.dashboard'))
+
+    buffer = BytesIO()
+    p = canvas.Canvas(buffer, pagesize=letter)
+    width, height = letter
+
+    # Título
+    p.setFont("Helvetica-Bold", 16)
+    p.drawString(100, height - 50, "Relatório de Exame de Raio-X")
+
+    # Informações do Paciente
+    p.setFont("Helvetica", 12)
+    p.drawString(100, height - 100, f"Nome do Paciente: {relatorio.paciente.user.nome}")
+    p.drawString(100, height - 120, f"Tipo de Exame: {relatorio.tipo_exame}")
+    p.drawString(100, height - 140, f"Data do Exame: {relatorio.data_exame.strftime('%d/%m/%Y')}")
+    p.drawString(100, height - 160, f"Médico Responsável: {relatorio.medico.nome}")
+
+    # Descrição
+    p.drawString(100, height - 200, "Descrição:")
+    p.drawString(100, height - 220, relatorio.descricao)
+
+    # Resultados
+    p.drawString(100, height - 260, "Resultados:")
+    y = height - 280
+    for resultado in relatorio.resultados:
+        p.drawString(100, y, f"Área Examinada: {resultado.area_examinada}")
+        y -= 20
+        p.drawString(100, y, f"Resultado: {resultado.resultado}")
+        y -= 20
+        p.drawString(100, y, f"Observações: {resultado.observacoes}")
+        y -= 40
+
+    p.showPage()
+    p.save()
+
+    buffer.seek(0)
+    return send_file(buffer, as_attachment=True, download_name=f'relatorio_{id}.pdf', mimetype='application/pdf')

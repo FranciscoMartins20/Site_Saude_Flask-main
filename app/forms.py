@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SelectField, SubmitField, DateField, FloatField, TextAreaField, FieldList, FormField
+from wtforms import StringField, PasswordField, SelectField, SubmitField, DateField, FloatField, HiddenField, FieldList, FormField, FileField
 from wtforms.validators import DataRequired, Email, EqualTo, Optional, ValidationError
 from .models import User
 
@@ -100,13 +100,19 @@ class ResultadoForm(FlaskForm):
     resultado = StringField('Resultado', validators=[DataRequired()])
     observacoes = StringField('Observações')
 
-# Formulário para relatório de Raio-X
+
+class ResultadoForm(FlaskForm):
+    id = HiddenField('id')
+    area_examinada = StringField('Área Examinada', validators=[DataRequired()])
+    resultado = StringField('Resultado', validators=[DataRequired()])
+    observacoes = StringField('Observações', validators=[Optional()])
+
 class RelatorioForm(FlaskForm):
     tipo_exame = StringField('Tipo de Exame', validators=[DataRequired()])
     data_exame = DateField('Data do Exame', format='%Y-%m-%d', validators=[DataRequired()])
-    descricao = TextAreaField('Descrição', validators=[DataRequired()])
-    imagem_url = StringField('URL da Imagem')
-    paciente = SelectField('Paciente', validators=[DataRequired()], coerce=int)
-    medico = SelectField('Médico', validators=[DataRequired()], coerce=int)
-    resultados = FieldList(FormField(ResultadoForm), min_entries=1, max_entries=10)
-    submit = SubmitField('Salvar Relatório')
+    descricao = StringField('Descrição', validators=[DataRequired()])
+    imagem_url = FileField('Imagem de Raio-X', validators=[Optional()])
+    paciente = SelectField('Paciente', coerce=int, validators=[DataRequired()])
+    medico = SelectField('Médico', coerce=int, validators=[DataRequired()])
+    resultados = FieldList(FormField(ResultadoForm), min_entries=1)
+    submit = SubmitField('Submeter Relatório')

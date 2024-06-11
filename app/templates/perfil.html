@@ -1,86 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil</title>
+    <title>Perfil do Utilizador</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/perfil.css') }}">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            width: 80%;
-            margin: 50px auto;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            border-radius: 8px;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        .profile-info {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .profile-info img {
-            border-radius: 50%;
-            width: 150px;
-            height: 150px;
-            margin-bottom: 20px;
-        }
-        .profile-info h2 {
-            color: #4c74af;
-        }
-        .profile-info p {
-            color: #333;
-            font-size: 18px;
-            margin: 5px 0;
-        }
-        .profile-info .role {
-            font-weight: bold;
-            color: #3e778e;
-        }
-        .additional-info {
-            margin-top: 20px;
-        }
-        .additional-info h3 {
-            color: #4c74af;
-        }
-        .additional-info p {
-            font-size: 16px;
-            color: #333;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Perfil do Usuário</h1>
-        <div class="profile-info">
+        <h1>Perfil de {{ user.nome }}</h1>
+        <p>Email: {{ user.email }}</p>
+        <p>Função: {{ user.role }}</p>
 
-            <h2>{{ user.nome }}</h2>
-            <p>Email: {{ user.email }}</p>
-            <p>Função: <span class="role">{{ user.role }}</span></p>
-            
-            {% if user.role == 'Utente' %}
-            <div class="additional-info">
-                <h3>Informações Adicionais</h3>
-                <p>Número do Cartão de Cidadão: {{ user.info.cc_number }}</p>
-                <p>Número de Utente de Saúde: {{ user.info.health_number }}</p>
-                <p>Género: {{ user.info.gender }}</p>
-                <p>Data de Nascimento: {{ user.info.birth_date }}</p>
-                <p>Peso: {{ user.info.weight }} kg</p>
-                <p>Altura: {{ user.info.height }} cm</p>
-                <p>IMC: {{ user.info.bmi }}</p>
-            </div>
-            {% endif %}
-        </div>
+        {% if user.info %}
+        <p>Número do Cartão de Cidadão: {{ user.info.cc_number }}</p>
+        <p>Número de Utente de Saúde: {{ user.info.health_number }}</p>
+        <p>Género: {{ user.info.gender }}</p>
+        <p>Data de Nascimento: {{ user.info.birth_date }}</p>
+        <p>Peso: {{ user.info.weight }}</p>
+        <p>Altura: {{ user.info.height }}</p>
+        <p>IMC: {{ user.info.bmi }}</p>
+        {% endif %}
+
+        <h2>Agendamentos</h2>
+        <ul>
+            {% for agendamento in agendamentos %}
+            <li>{{ agendamento.tipo }} em {{ agendamento.data }} às {{ agendamento.hora }}</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Histórico de Exames</h2>
+        <ul>
+            {% for exame in historico_exames %}
+            <li>
+                {{ exame.tipo_exame }} em {{ exame.data_exame }}
+                <a href="{{ url_for('main.relatorio_detail', id=exame.id) }}">Ver Detalhes</a> |
+                <!-- <a href="{{ url_for('main.export_relatorio_pdf', id=exame.id) }}">Exportar PDF</a> -->
+            </li>
+            {% endfor %}
+        </ul>
     </div>
 </body>
 </html>

@@ -67,7 +67,9 @@
 <body>
     <div class="container">
         <h1>Lista de Agendamentos</h1>
-        <a href="{{ url_for('main.create_agendamento') }}" class="add-button">Adicionar Novo Agendamento</a>
+        {% if user.role == 'Administrador' or user.role == 'Rececionista' or user.role == 'TSDT' %}
+        <a href="{{ url_for('main.dashboard') }}" class="add-button">Voltar à Dashboard</a>
+        {% endif %}
         <table>
             <thead>
                 <tr>
@@ -88,7 +90,9 @@
                     <td>{{ agendamento.hora }}</td>
                     <td>{{ agendamento.medico_nome }}</td>
                     <td>
+                        {% if user.role == 'Administrador' or user.role == 'Rececionista' %}
                         <a href="{{ url_for('main.edit_agendamento', agendamento_id=agendamento.id) }}" class="edit-button">Editar</a>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}

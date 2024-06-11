@@ -44,28 +44,6 @@
             padding: 5px;
         }
     </style>
-    <script>
-        function calcularIdade(dataNascimento) {
-            const hoje = new Date();
-            const nascimento = new Date(dataNascimento);
-            let idade = hoje.getFullYear() - nascimento.getFullYear();
-            const mes = hoje.getMonth() - nascimento.getMonth();
-            if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
-                idade--;
-            }
-            return idade;
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            const dataNascimento = "{{ relatorio.paciente.user.birth_date }}";
-            if (dataNascimento) {
-                const idade = calcularIdade(dataNascimento);
-                document.getElementById("idade").textContent = idade + " anos";
-            } else {
-                document.getElementById("idade").textContent = "Data de nascimento inválida";
-            }
-        });
-    </script>
 </head>
 <body>
     <div class="header">
@@ -79,6 +57,10 @@
             <tr>
                 <th>Nome</th>
                 <td>{{ relatorio.paciente.user.nome }}</td>
+            </tr>
+            <tr>
+                <th>Idade</th>
+                <td>{{ relatorio.paciente.user.birth_date }}</td>
             </tr>
             <tr>
                 <th>Género</th>
@@ -144,7 +126,7 @@
     <div class="section">
         <h2>Assinatura</h2>
         <p>{{ relatorio.medico.nome }}</p>
-        <p>Médico Radiologista</p>
+        <p>Médica Radiologista</p>
     </div>
 </body>
 </html>

@@ -9,7 +9,9 @@
 <body>
     <div class="container">
         <h1>Lista de Relatórios de Raio-X</h1>
+        {% if user.role != 'TSDT' %}
         <a href="{{ url_for('main.create_relatorio') }}" class="add-button">Adicionar Novo Relatório</a>
+        {% endif %}
         <table>
             <thead>
                 <tr>
@@ -30,16 +32,20 @@
                     <td>{{ relatorio.paciente.user.nome }}</td>
                     <td>{{ relatorio.medico.nome }}</td>
                     <td>
-                        <a href="{{ url_for('main.relatorio_detail', id=relatorio.id) }}">Ver Detalhes</a> |
+                        <a href="{{ url_for('main.relatorio_detail', id=relatorio.id) }}">Ver Detalhes</a>
+                        {% if user.role != 'TSDT' %}
+                        |
                         <a href="{{ url_for('main.edit_relatorio', id=relatorio.id) }}">Editar</a> |
                         <form action="{{ url_for('main.delete_relatorio', id=relatorio.id) }}" method="POST" style="display:inline;">
                             <button type="submit" onclick="return confirm('Tem certeza de que deseja deletar este relatório?');">Deletar</button>
                         </form>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+        <a href="{{ url_for('main.dashboard') }}" class="btn">Voltar à Dashboard</a>
     </div>
 </body>
 </html>

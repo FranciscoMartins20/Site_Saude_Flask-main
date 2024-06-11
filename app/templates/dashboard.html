@@ -10,11 +10,15 @@
     <div class="container">
         <h1>Dashboard</h1>
         <p>Bem-vindo, {{ user['nome'] }}!</p>
+
+        <ul>
+            <li><a href="{{ url_for('main.home') }}">Home</a></li>
+            <li><a href="{{ url_for('main.logout') }}">Logout</a></li>
+        </ul>
         
         {% if user['role'] == 'Administrador' %}
         <h2>Administração</h2>
         <ul>
-            <li><a href="{{ url_for('main.home') }}">Home</a></li>
             <li><a href="{{ url_for('main.users_list') }}">Gerenciar Usuários</a></li>
             <li><a href="{{ url_for('main.agendamentos_list') }}">Lista de Agendamentos</a></li>
             <li><a href="{{ url_for('main.relatorios_list') }}">Lista de Relatórios</a></li>
@@ -25,7 +29,6 @@
         {% if user['role'] == 'Rececionista' %}
         <h2>Rececionista</h2>
         <ul>
-            <li><a href="{{ url_for('main.home') }}">Home</a></li>
             <li><a href="{{ url_for('main.create_agendamento') }}">Agendamento de Exames</a></li>
             <li><a href="{{ url_for('main.agendamentos_list') }}">Lista de Agendamentos</a></li>
             <li><a href="{{ url_for('main.users_list') }}">Gerenciar Usuários</a></li>
@@ -35,7 +38,6 @@
         {% if user['role'] == 'Médico' %}
         <h2>Médico</h2>
         <ul>
-            <li><a href="{{ url_for('main.relatorio_raio_x') }}">Relatório de Exame de Raio-X</a></li>
             <li><a href="{{ url_for('main.agendamentos_list') }}">Lista de Agendamentos</a></li>
             <li><a href="{{ url_for('main.relatorios_list') }}">Lista de Relatórios</a></li>
         </ul>
@@ -45,6 +47,7 @@
         <h2>TSDT</h2>
         <ul>
             <li><a href="{{ url_for('main.agendamentos_list') }}">Lista de Agendamentos</a></li>
+            <li><a href="{{ url_for('main.relatorios_list') }}">Lista de Relatórios</a></li>
         </ul>
         {% endif %}
     </div>

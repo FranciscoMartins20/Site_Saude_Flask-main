@@ -9,11 +9,11 @@
 <body>
     <div class="container">
         <h1>Editar Relatório de Raio-X</h1>
-        <form method="POST" action="{{ url_for('main.edit_relatorio', id=relatorio.id) }}">
+        <form method="POST" action="{{ url_for('main.edit_relatorio', id=relatorio.id) }}" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             <div class="form-group">
                 {{ form.tipo_exame.label }}<br>
-                {{ form.tipo_exame(size=32, class="form-control") }}
+                {{ form.tipo_exame(class="form-control") }}
             </div>
             <div class="form-group">
                 {{ form.data_exame.label }}<br>
@@ -25,7 +25,10 @@
             </div>
             <div class="form-group">
                 {{ form.imagem_url.label }}<br>
-                {{ form.imagem_url(size=64, class="form-control") }}
+                {{ form.imagem_url(class="form-control") }}
+                {% if relatorio.imagem_url %}
+                <img src="{{ url_for('static', filename=relatorio.imagem_url) }}" alt="Imagem de Raio-X" style="width: 100px; margin-top: 10px;">
+                {% endif %}
             </div>
             <div class="form-group">
                 {{ form.paciente.label }}<br>
@@ -40,15 +43,15 @@
                 {% for resultado in form.resultados %}
                 <div class="form-group">
                     {{ resultado.area_examinada.label }}<br>
-                    {{ resultado.area_examinada(size=32, class="form-control") }}
+                    {{ resultado.area_examinada(class="form-control") }}
                 </div>
                 <div class="form-group">
                     {{ resultado.resultado.label }}<br>
-                    {{ resultado.resultado(size=64, class="form-control") }}
+                    {{ resultado.resultado(class="form-control") }}
                 </div>
                 <div class="form-group">
                     {{ resultado.observacoes.label }}<br>
-                    {{ resultado.observacoes(size=64, class="form-control") }}
+                    {{ resultado.observacoes(class="form-control") }}
                 </div>
                 {% endfor %}
             </div>
@@ -58,26 +61,6 @@
             </div>
         </form>
     </div>
-    <script>
-        document.getElementById('add_resultado').addEventListener('click', function() {
-            var index = document.querySelectorAll('#resultados .form-group').length / 3;
-            var resultadosDiv = document.getElementById('resultados');
-            var newResultado = `
-                <div class="form-group">
-                    <label for="resultados-${index}-area_examinada">Área Examinada</label><br>
-                    <input type="text" id="resultados-${index}-area_examinada" name="resultados-${index}-area_examinada" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="resultados-${index}-resultado">Resultado</label><br>
-                    <input type="text" id="resultados-${index}-resultado" name="resultados-${index}-resultado" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="resultados-${index}-observacoes">Observações</label><br>
-                    <input type="text" id="resultados-${index}-observacoes" name="resultados-${index}-observacoes" class="form-control">
-                </div>
-            `;
-            resultadosDiv.insertAdjacentHTML('beforeend', newResultado);
-        });
-    </script>
+    <script src="{{ url_for('static', filename='js/edit_relatorio.js') }}"></script>
 </body>
 </html>
