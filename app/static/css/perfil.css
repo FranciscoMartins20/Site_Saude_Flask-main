@@ -1,82 +1,90 @@
-/* Reset CSS */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Roboto', Arial, sans-serif;
     background-color: #f4f4f4;
-    color: #333;
+    margin: 0;
+    padding: 20px;
 }
 
 .container {
-    width: 80%;
-    margin: 20px auto;
+    max-width: 800px;
+    margin: 0 auto;
     background: #fff;
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
     border-radius: 8px;
 }
 
-h1 {
-    font-size: 2.5em;
-    color: #007BFF;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #007BFF;
-    padding-bottom: 10px;
+.profile-header {
+    text-align: center;
+    margin-bottom: 30px;
 }
 
-p {
-    font-size: 1.2em;
-    margin-bottom: 10px;
+h1 {
+    color: #f1c40f;
+    font-weight: 700;
 }
 
 h2 {
-    font-size: 2em;
     color: #333;
-    margin-top: 30px;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #ddd;
+    font-weight: 700;
+    border-bottom: 2px solid #f1c40f;
     padding-bottom: 10px;
+    margin-bottom: 20px;
 }
 
-ul {
-    list-style-type: none;
-}
-
-ul li {
-    font-size: 1.2em;
+.profile-info p,
+.profile-agendamentos ul,
+.profile-historico ul {
     margin-bottom: 10px;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
+    color: #555;
 }
 
-ul li a {
-    color: #007BFF;
+.profile-info p strong {
+    color: #333;
+}
+
+.profile-agendamentos ul,
+.profile-historico ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.profile-agendamentos li,
+.profile-historico li {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+.profile-agendamentos li a,
+.profile-historico li a {
+    color: #f1c40f;
     text-decoration: none;
 }
 
-ul li a:hover {
+.profile-agendamentos li a:hover,
+.profile-historico li a:hover {
     text-decoration: underline;
 }
 
 @media (max-width: 768px) {
-    .container {
-        width: 95%;
+    body {
         padding: 10px;
     }
 
+    .container {
+        padding: 15px;
+    }
+
     h1 {
-        font-size: 2em;
+        font-size: 24px;
     }
 
     h2 {
-        font-size: 1.5em;
-    }
-
-    p, ul li {
-        font-size: 1em;
+        font-size: 20px;
     }
 }

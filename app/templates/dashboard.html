@@ -4,50 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>Dashboard</h1>
+        <h1><i class="fas fa-tachometer-alt"></i> Dashboard</h1>
         <p>Bem-vindo, {{ user['nome'] }}!</p>
 
-        <ul>
-            <li><a href="{{ url_for('main.home') }}">Home</a></li>
-            <li><a href="{{ url_for('main.logout') }}">Logout</a></li>
+        <ul class="nav">
+            <li><a href="{{ url_for('main.home') }}"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="{{ url_for('main.logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
         
         {% if user['role'] == 'Administrador' %}
-        <h2>Administração</h2>
-        <ul>
-            <li><a href="{{ url_for('main.users_list') }}">Gerenciar Usuários</a></li>
-            <li><a href="{{ url_for('main.agendamentos_list') }}">Lista de Agendamentos</a></li>
-            <li><a href="{{ url_for('main.relatorios_list') }}">Lista de Relatórios</a></li>
-            <li><a href="{{ url_for('main.me') }}">Perfil</a></li>
+        <h2><i class="fas fa-user-shield"></i> Administração</h2>
+        <ul class="admin">
+            <li><a href="{{ url_for('main.users_list') }}"><i class="fas fa-users"></i> Utilizadores</a></li>
+            <li><a href="{{ url_for('main.agendamentos_list') }}"><i class="fas fa-calendar-alt"></i> Lista de Agendamentos</a></li>
+            <li><a href="{{ url_for('main.relatorios_list') }}"><i class="fas fa-file-alt"></i> Lista de Relatórios</a></li>
+            <li><a href="{{ url_for('main.me') }}"><i class="fas fa-user"></i> Perfil</a></li>
         </ul>
         {% endif %}
         
         {% if user['role'] == 'Rececionista' %}
-        <h2>Rececionista</h2>
+        <h2><i class="fas fa-receipt"></i> Rececionista</h2>
         <ul>
-            <li><a href="{{ url_for('main.create_agendamento') }}">Agendamento de Exames</a></li>
-            <li><a href="{{ url_for('main.agendamentos_list') }}">Lista de Agendamentos</a></li>
-            <li><a href="{{ url_for('main.users_list') }}">Gerenciar Usuários</a></li>
+            <li><a href="{{ url_for('main.create_agendamento') }}"><i class="fas fa-calendar-plus"></i> Agendamento de Exames</a></li>
+            <li><a href="{{ url_for('main.agendamentos_list') }}"><i class="fas fa-calendar-alt"></i> Lista de Agendamentos</a></li>
+            <li><a href="{{ url_for('main.users_list') }}"><i class="fas fa-users"></i> Utentes</a></li>
         </ul>
         {% endif %}
         
         {% if user['role'] == 'Médico' %}
-        <h2>Médico</h2>
+        <h2><i class="fas fa-stethoscope"></i> Médico</h2>
         <ul>
-            <li><a href="{{ url_for('main.agendamentos_list') }}">Lista de Agendamentos</a></li>
-            <li><a href="{{ url_for('main.relatorios_list') }}">Lista de Relatórios</a></li>
+            <li><a href="{{ url_for('main.agendamentos_list') }}"><i class="fas fa-calendar-alt"></i> Lista de Agendamentos</a></li>
+            <li><a href="{{ url_for('main.relatorios_list') }}"><i class="fas fa-file-alt"></i> Lista de Relatórios</a></li>
         </ul>
         {% endif %}
         
         {% if user['role'] == 'TSDT' %}
-        <h2>TSDT</h2>
+        <h2><i class="fas fa-notes-medical"></i> TSDT</h2>
         <ul>
-            <li><a href="{{ url_for('main.agendamentos_list') }}">Lista de Agendamentos</a></li>
-            <li><a href="{{ url_for('main.relatorios_list') }}">Lista de Relatórios</a></li>
+            <li><a href="{{ url_for('main.agendamentos_list') }}"><i class="fas fa-calendar-alt"></i> Lista de Agendamentos</a></li>
+            <li><a href="{{ url_for('main.relatorios_list') }}"><i class="fas fa-file-alt"></i> Lista de Relatórios</a></li>
         </ul>
         {% endif %}
     </div>

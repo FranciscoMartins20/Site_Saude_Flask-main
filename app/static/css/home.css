@@ -1,17 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 body {
+    font-family: 'Roboto', Arial, sans-serif;
     margin: 0;
-    font-family: 'Helvetica Neue', sans-serif;
-    background-color: #000000;
-    color: #333;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 header {
-    background-color: #2C3E50; /* Deep Blue */
-    color: #ffffff;
+    background-color: #2f2f2f; /* Cinza escuro */
     padding: 20px 0;
+    color: #fff;
 }
 
 header .container {
@@ -19,18 +18,17 @@ header .container {
     justify-content: space-between;
     align-items: center;
     max-width: 1200px;
-    margin: 0 auto;
+    margin: auto;
     padding: 0 20px;
-    box-sizing: border-box;
 }
 
 header h1 {
     margin: 0;
-    font-size: 1.8em;
+    font-size: 24px;
 }
 
 nav ul {
-    list-style-type: none;
+    list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
@@ -44,87 +42,105 @@ nav ul li {
 nav ul li a, nav ul li span {
     color: #fff;
     text-decoration: none;
-    font-size: 1em;
-    transition: color 0.3s;
+    font-size: 16px;
+    padding: 5px 10px;
+    border-radius: 5px;
 }
 
 nav ul li a:hover {
-    color: #ffdd57;
+    background-color: #404040; /* Cinza médio */
 }
 
-main {
-    flex: 1;
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #f1c40f; /* Amarelo */
+    border: none;
+    border-radius: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #d4ac0d; /* Amarelo mais escuro */
 }
 
 .hero {
     position: relative;
-    height: 100vh;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    text-align: center;
+    height: 90vh;
     overflow: hidden;
 }
 
-.hero video {
+#heroVideo {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transform: translate(-50%, -50%);
     z-index: -1;
 }
 
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Escurece o vídeo */
+    z-index: 0;
+}
+
 .hero-content {
-    position: relative;
-    z-index: 1;
-    max-width: 800px;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 8px;
-}
-
-.hero h2 {
-    font-size: 2.5em;
-    margin-bottom: 10px;
-}
-
-.hero p {
-    font-size: 1.2em;
-    margin-bottom: 20px;
-}
-
-.cta-button {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #ffdd57;
-    color: #333;
-    text-decoration: none;
-    font-size: 1.2em;
-    border-radius: 4px;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.cta-button:hover {
-    background-color: #e6c200;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     color: #fff;
+    text-align: center;
+    z-index: 1;
 }
 
-@media (max-width: 768px) {
-    header .container {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+.hero-content h2 {
+    font-size: 48px;
+    margin: 0;
+}
 
-    .hero h2 {
-        font-size: 2em;
-    }
+.hero-content p {
+    font-size: 24px;
+    margin-top: 10px;
+}
 
-    .hero p {
-        font-size: 1em;
-    }
+footer {
+    background-color: #2f2f2f; /* Cinza escuro */
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+    position: relative;
+    width: 100%;
+    bottom: 0;
+}
+
+footer .container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 0 20px;
+}
+
+footer p {
+    margin: 5px 0;
+}
+
+footer a {
+    color: #f1c40f; /* Amarelo */
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
 }

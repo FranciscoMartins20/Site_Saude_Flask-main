@@ -1,55 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes do Usuário</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: auto;
-        }
-        h1 {
-            margin-bottom: 20px;
-        }
-        .info {
-            margin-bottom: 20px;
-        }
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 10px 0;
-            border: 1px solid #007BFF;
-            background-color: #007BFF;
-            color: white;
-            text-align: center;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <title>Detalhes do Utilizador</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/user_detail.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Detalhes do Usuário</h1>
+        <h1>Detalhes do Utilizador</h1>
         <div class="info">
             <p><strong>Nome:</strong> {{ user.nome }}</p>
             <p><strong>Email:</strong> {{ user.email }}</p>
-            <p><strong>Role:</strong> {{ user.role }}</p>
+            <p><strong>Função:</strong> {{ user.role }}</p>
         </div>
-        <a href="{{ url_for('main.edit_user', id=user.id) }}" class="btn">Editar Usuário</a>
+        <a href="{{ url_for('main.edit_user', id=user.id) }}" class="btn">Editar Utilizador</a>
         {% if session['user']['role'] == 'Administrador' %}
         <form action="{{ url_for('main.delete_user', id=user.id) }}" method="POST" style="display:inline;">
             {{ delete_form.hidden_tag() }}
-            <button type="submit" onclick="return confirm('Tem certeza de que deseja deletar este usuário?');" class="btn">Deletar Usuário</button>
+            <button type="submit" onclick="return confirm('Tem certeza de que deseja eliminar este utilizador?');" class="btn delete-btn">Eliminar Utilizador</button>
         </form>
         {% endif %}
-        <a href="{{ url_for('main.users_list') }}" class="btn">Voltar à Lista de Usuários</a>
+        <a href="{{ url_for('main.users_list') }}" class="btn">Voltar à Lista de Utilizadores</a>
     </div>
 </body>
 </html>

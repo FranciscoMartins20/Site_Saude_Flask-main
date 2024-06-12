@@ -4,12 +4,12 @@ body {
     font-family: 'Roboto', Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 0;
-    padding: 0;
+    padding: 20px;
 }
 
 .container {
-    width: 80%;
-    margin: 50px auto;
+    max-width: 1000px;
+    margin: 0 auto;
     background: #fff;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -20,28 +20,26 @@ h1 {
     text-align: center;
     color: #f1c40f;
     font-weight: 700;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 }
 
-.button-group {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-.add-button {
-    background-color: #f1c40f; /* Amarelo */
+.add-button, .btn {
+    background-color: #f1c40f;
     color: white;
-    padding: 10px 15px;
+    padding: 10px 20px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     border-radius: 4px;
+    border: none;
+    cursor: pointer;
     transition: background-color 0.3s ease;
+    font-size: 16px;
+    margin-top: 10px;
 }
 
-.add-button:hover {
-    background-color: #f39c12; /* Amarelo mais escuro */
+.add-button:hover, .btn:hover {
+    background-color: #f39c12;
 }
 
 table {
@@ -60,46 +58,61 @@ th, td {
 }
 
 th {
-    background-color: #7f8c8d;
+    background-color: #f1c40f;
     color: white;
-    font-weight: 700;
 }
 
 tr:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: #f9f9f9;
 }
 
-.edit-button {
-    background-color: #f1c40f; /* Amarelo */
-    color: white;
-    padding: 5px 10px;
-    text-align: center;
+a {
+    color: #f1c40f;
     text-decoration: none;
-    display: inline-block;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.delete-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
     border-radius: 4px;
+    cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-.edit-button:hover {
-    background-color: #f39c12;
+.delete-button:hover {
+    background-color: #c0392b;
 }
 
 @media (max-width: 768px) {
-    .container {
-        width: 90%;
+    body {
         padding: 10px;
     }
 
-    .button-group {
-        flex-direction: column;
+    .container {
+        padding: 15px;
     }
 
-    .button-group .add-button {
-        margin-bottom: 10px;
+    h1 {
+        font-size: 24px;
     }
 
     th, td {
         font-size: 14px;
         padding: 10px;
+    }
+
+    .add-button, .btn {
+        font-size: 14px;
+    }
+
+    .delete-button {
+        font-size: 14px;
+        padding: 5px 8px;
     }
 }

@@ -42,7 +42,6 @@ def register():
         user = User(nome=form.nome.data, email=form.email.data, password=hashed_password, role='Utente')
         db.session.add(user)
         db.session.commit()
-        flash('Sua conta foi criada! Agora pode fazer login', 'success')
         return redirect(url_for('main.login'))
     return render_template('register.html', title='Registrar', form=form)
 
@@ -53,14 +52,14 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             session['user'] = {'id': user.id, 'nome': user.nome, 'email': user.email, 'role': user.role}
-            flash('Login realizado com sucesso!', 'success')
             if session['user']['role'] == 'Utente':
                 return redirect(url_for('main.home'))
             else:
                 return redirect(url_for('main.home'))
         else:
-            flash('Login falhou. Verifique o nome de utilizador e a senha', 'danger')
+            form.email.errors.append('Login falhou. Verifique o nome de utilizador e a senha')
     return render_template('login.html', title='Login', form=form)
+
 
 @main.route('/logout')
 def logout():
@@ -407,55 +406,3 @@ def relatorio_detail(id):
     user = User.query.get_or_404(user_id)
     return render_template('relatorio_detail.html', relatorio=relatorio, user=user)
 
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
-from io import BytesIO
-from flask import send_file
-
-@main.route('/relatorio/<int:id>/export_pdf')
-@roles_required('Utente', 'Administrador', 'Médico', 'TSDT')
-def export_relatorio_pdf(id):
-    relatorio = RelatorioRaioX.query.get_or_404(id)
-    user_role = session['user']['role']
-    user_id = session['user']['id']
-
-    # Verificar se o usuário tem permissão para ver este relatório
-    if user_role == 'Utente' and relatorio.paciente_id != user_id:
-        flash('Você não tem permissão para exportar este relatório.', 'danger')
-        return redirect(url_for('main.dashboard'))
-
-    buffer = BytesIO()
-    p = canvas.Canvas(buffer, pagesize=letter)
-    width, height = letter
-
-    # Título
-    p.setFont("Helvetica-Bold", 16)
-    p.drawString(100, height - 50, "Relatório de Exame de Raio-X")
-
-    # Informações do Paciente
-    p.setFont("Helvetica", 12)
-    p.drawString(100, height - 100, f"Nome do Paciente: {relatorio.paciente.user.nome}")
-    p.drawString(100, height - 120, f"Tipo de Exame: {relatorio.tipo_exame}")
-    p.drawString(100, height - 140, f"Data do Exame: {relatorio.data_exame.strftime('%d/%m/%Y')}")
-    p.drawString(100, height - 160, f"Médico Responsável: {relatorio.medico.nome}")
-
-    # Descrição
-    p.drawString(100, height - 200, "Descrição:")
-    p.drawString(100, height - 220, relatorio.descricao)
-
-    # Resultados
-    p.drawString(100, height - 260, "Resultados:")
-    y = height - 280
-    for resultado in relatorio.resultados:
-        p.drawString(100, y, f"Área Examinada: {resultado.area_examinada}")
-        y -= 20
-        p.drawString(100, y, f"Resultado: {resultado.resultado}")
-        y -= 20
-        p.drawString(100, y, f"Observações: {resultado.observacoes}")
-        y -= 40
-
-    p.showPage()
-    p.save()
-
-    buffer.seek(0)
-    return send_file(buffer, as_attachment=True, download_name=f'relatorio_{id}.pdf', mimetype='application/pdf')

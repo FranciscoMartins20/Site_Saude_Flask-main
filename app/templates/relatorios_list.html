@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Relatórios de Raio-X</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/relatorios_list.css') }}">
 </head>
 <body>
     <div class="container">
@@ -37,7 +37,7 @@
                         |
                         <a href="{{ url_for('main.edit_relatorio', id=relatorio.id) }}">Editar</a> |
                         <form action="{{ url_for('main.delete_relatorio', id=relatorio.id) }}" method="POST" style="display:inline;">
-                            <button type="submit" onclick="return confirm('Tem certeza de que deseja deletar este relatório?');">Deletar</button>
+                            <button type="submit" onclick="return confirm('Tem certeza de que deseja deletar este relatório?');" class="delete-button">Eliminar</button>
                         </form>
                         {% endif %}
                     </td>
@@ -45,7 +45,7 @@
                 {% endfor %}
             </tbody>
         </table>
-        <a href="{{ url_for('main.dashboard') }}" class="btn">Voltar à Dashboard</a>
+        <a href="{{ url_for('main.dashboard') }}" class="btn">Voltar ao Dashboard</a>
     </div>
 </body>
 </html>

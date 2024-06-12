@@ -4,72 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Agendamentos</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            width: 80%;
-            margin: 50px auto;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            border-radius: 8px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 15px;
-            text-align: left;
-        }
-        th {
-            background-color: #4c74af;
-            color: white;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        .edit-button {
-            background-color: #4CAF50; /* Green */
-            color: white;
-            padding: 5px 10px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            border-radius: 4px;
-        }
-        .edit-button:hover {
-            background-color: #45a049;
-        }
-        .add-button {
-            background-color: #007BFF;
-            color: white;
-            padding: 10px 15px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            border-radius: 4px;
-            margin-bottom: 20px;
-        }
-        .add-button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/agendamentos_list.css') }}">
 </head>
 <body>
     <div class="container">
         <h1>Lista de Agendamentos</h1>
-        {% if user.role == 'Administrador' or user.role == 'Rececionista' or user.role == 'TSDT' %}
-        <a href="{{ url_for('main.dashboard') }}" class="add-button">Voltar à Dashboard</a>
-        {% endif %}
+        <div class="button-group">
+            <a href="{{ url_for('main.dashboard') }}" class="add-button">Voltar à Dashboard</a>
+            {% if user.role == 'Administrador' or user.role == 'Rececionista' %}
+            <a href="{{ url_for('main.create_agendamento') }}" class="add-button">Adicionar Novo Agendamento</a>
+            {% endif %}
+        </div>
         <table>
             <thead>
                 <tr>

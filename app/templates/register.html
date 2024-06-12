@@ -1,60 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>Registrar</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/register.css') }}">
 </head>
 <body>
-    <form method="POST" action="{{ url_for('main.register') }}">
-        <h2>Register</h2>
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            {% for message in messages %}
-              <div>{{ message }}</div>
-            {% endfor %}
-          {% endif %}
-        {% endwith %}
+    <form method="POST" action="">
+        <h2>Registrar</h2>
         {{ form.hidden_tag() }}
-        <p>
-            {{ form.nome.label }}<br>
-            {{ form.nome(size=32) }}<br>
-            {% for error in form.nome.errors %}
-              <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.email.label }}<br>
-            {{ form.email(size=32) }}<br>
-            {% for error in form.email.errors %}
-              <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}<br>
-            {% for error in form.password.errors %}
-              <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.confirm_password.label }}<br>
-            {{ form.confirm_password(size=32) }}<br>
-            {% for error in form.confirm_password.errors %}
-              <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-
-        <p>
-          {{ form.role.label }}<br>
-          {{ form.role() }}<br>
-          {% for error in form.role.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-          {% endfor %}
-      </p>
-        <p>{{ form.submit() }}</p>
-        <p>Already have an account? <a href="{{ url_for('main.login') }}">Log in</a></p>
+        <div class="form-group">
+            <label for="nome">{{ form.nome.label }}</label>
+            {{ form.nome(class="form-control") }}
+            {% if form.nome.errors %}
+                <span class="error">{{ form.nome.errors[0] }}</span>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label for="email">{{ form.email.label }}</label>
+            {{ form.email(class="form-control") }}
+            {% if form.email.errors %}
+                <span class="error">{{ form.email.errors[0] }}</span>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label for="password">{{ form.password.label }}</label>
+            {{ form.password(class="form-control") }}
+            {% if form.password.errors %}
+                <span class="error">{{ form.password.errors[0] }}</span>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label for="confirm_password">{{ form.confirm_password.label }}</label>
+            {{ form.confirm_password(class="form-control") }}
+            {% if form.confirm_password.errors %}
+                <span class="error">{{ form.confirm_password.errors[0] }}</span>
+            {% endif %}
+        </div>
+        <div class="form-group form-submit">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+        <p>Já tem uma conta? <a href="{{ url_for('main.login') }}">Faça login</a></p>
     </form>
 </body>
 </html>

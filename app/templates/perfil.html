@@ -8,37 +8,46 @@
 </head>
 <body>
     <div class="container">
-        <h1>Perfil de {{ user.nome }}</h1>
-        <p>Email: {{ user.email }}</p>
-        <p>Função: {{ user.role }}</p>
+        <div class="profile-header">
+            <h1>Perfil de {{ user.nome }}</h1>
+        </div>
+        <div class="profile-info">
+            <h2>Informações Pessoais</h2>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Função:</strong> {{ user.role }}</p>
 
-        {% if user.info %}
-        <p>Número do Cartão de Cidadão: {{ user.info.cc_number }}</p>
-        <p>Número de Utente de Saúde: {{ user.info.health_number }}</p>
-        <p>Género: {{ user.info.gender }}</p>
-        <p>Data de Nascimento: {{ user.info.birth_date }}</p>
-        <p>Peso: {{ user.info.weight }}</p>
-        <p>Altura: {{ user.info.height }}</p>
-        <p>IMC: {{ user.info.bmi }}</p>
-        {% endif %}
+            {% if user.info %}
+            <p><strong>Número do Cartão de Cidadão:</strong> {{ user.info.cc_number }}</p>
+            <p><strong>Número de Utente de Saúde:</strong> {{ user.info.health_number }}</p>
+            <p><strong>Género:</strong> {{ user.info.gender }}</p>
+            <p><strong>Data de Nascimento:</strong> {{ user.info.birth_date }}</p>
+            <p><strong>Peso:</strong> {{ user.info.weight }} kg</p>
+            <p><strong>Altura:</strong> {{ user.info.height }} cm</p>
+            <p><strong>IMC:</strong> {{ user.info.bmi }}</p>
+            {% endif %}
+        </div>
 
-        <h2>Agendamentos</h2>
-        <ul>
-            {% for agendamento in agendamentos %}
-            <li>{{ agendamento.tipo }} em {{ agendamento.data }} às {{ agendamento.hora }}</li>
-            {% endfor %}
-        </ul>
+        <div class="profile-agendamentos">
+            <h2>Agendamentos</h2>
+            <ul>
+                {% for agendamento in agendamentos %}
+                <li>{{ agendamento.tipo }} em {{ agendamento.data }} às {{ agendamento.hora }}</li>
+                {% endfor %}
+            </ul>
+        </div>
 
-        <h2>Histórico de Exames</h2>
-        <ul>
-            {% for exame in historico_exames %}
-            <li>
-                {{ exame.tipo_exame }} em {{ exame.data_exame }}
-                <a href="{{ url_for('main.relatorio_detail', id=exame.id) }}">Ver Detalhes</a> |
-                <!-- <a href="{{ url_for('main.export_relatorio_pdf', id=exame.id) }}">Exportar PDF</a> -->
-            </li>
-            {% endfor %}
-        </ul>
+        <div class="profile-historico">
+            <h2>Histórico de Exames</h2>
+            <ul>
+                {% for exame in historico_exames %}
+                <li>
+                    {{ exame.tipo_exame }} em {{ exame.data_exame }}
+                    <a href="{{ url_for('main.relatorio_detail', id=exame.id) }}">Ver Detalhes</a>
+                    <!-- | <a href="{{ url_for('main.export_relatorio_pdf', id=exame.id) }}">Exportar PDF</a> -->
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </body>
 </html>

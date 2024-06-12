@@ -4,63 +4,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Relatório de Raio-X</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/edit_relatorio.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Editar Relatório de Raio-X</h1>
-        <form method="POST" action="{{ url_for('main.edit_relatorio', id=relatorio.id) }}" enctype="multipart/form-data">
-            {{ form.hidden_tag() }}
+    <h1>Editar Relatório de Raio-X</h1>
+    <form method="POST" action="{{ url_for('main.edit_relatorio', id=relatorio.id) }}" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="form-row">
             <div class="form-group">
-                {{ form.tipo_exame.label }}<br>
+                <label for="tipo_exame">{{ form.tipo_exame.label }}</label>
                 {{ form.tipo_exame(class="form-control") }}
             </div>
             <div class="form-group">
-                {{ form.data_exame.label }}<br>
+                <label for="data_exame">{{ form.data_exame.label }}</label>
                 {{ form.data_exame(class="form-control") }}
             </div>
+        </div>
+        <div class="form-group">
+            <label for="descricao">{{ form.descricao.label }}</label>
+            {{ form.descricao(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <label for="imagem_url">{{ form.imagem_url.label }}</label>
+            {{ form.imagem_url(class="form-control", id="imagem_url") }}
+            {% if relatorio.imagem_url %}
+            <img src="{{ url_for('static', filename=relatorio.imagem_url) }}" id="imagem_preview" alt="Imagem de Raio-X" style="width: 100px; margin-top: 10px;">
+            {% endif %}
+            <img id="new_imagem_preview" alt="Nova Imagem de Raio-X" style="display: none; width: 100px; margin-top: 10px;">
+        </div>
+        <div class="form-row">
             <div class="form-group">
-                {{ form.descricao.label }}<br>
-                {{ form.descricao(class="form-control") }}
-            </div>
-            <div class="form-group">
-                {{ form.imagem_url.label }}<br>
-                {{ form.imagem_url(class="form-control") }}
-                {% if relatorio.imagem_url %}
-                <img src="{{ url_for('static', filename=relatorio.imagem_url) }}" alt="Imagem de Raio-X" style="width: 100px; margin-top: 10px;">
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.paciente.label }}<br>
+                <label for="paciente">{{ form.paciente.label }}</label>
                 {{ form.paciente(class="form-control") }}
             </div>
             <div class="form-group">
-                {{ form.medico.label }}<br>
+                <label for="medico">{{ form.medico.label }}</label>
                 {{ form.medico(class="form-control") }}
             </div>
-            <h2>Resultados</h2>
-            <div id="resultados">
-                {% for resultado in form.resultados %}
+        </div>
+        <h2>Resultados</h2>
+        <div id="resultados">
+            {% for resultado in form.resultados %}
+            <div class="resultado-item">
                 <div class="form-group">
-                    {{ resultado.area_examinada.label }}<br>
+                    <label for="area_examinada">{{ resultado.area_examinada.label }}</label>
                     {{ resultado.area_examinada(class="form-control") }}
                 </div>
                 <div class="form-group">
-                    {{ resultado.resultado.label }}<br>
+                    <label for="resultado">{{ resultado.resultado.label }}</label>
                     {{ resultado.resultado(class="form-control") }}
                 </div>
                 <div class="form-group">
-                    {{ resultado.observacoes.label }}<br>
+                    <label for="observacoes">{{ resultado.observacoes.label }}</label>
                     {{ resultado.observacoes(class="form-control") }}
                 </div>
-                {% endfor %}
             </div>
-            <button type="button" id="add_resultado" class="btn">Adicionar Resultado</button>
-            <div class="form-group">
-                {{ form.submit(class="btn btn-primary") }}
-            </div>
-        </form>
-    </div>
+            {% endfor %}
+        </div>
+        <button type="button" id="add_resultado" class="btn">Adicionar Resultado</button>
+        <div class="form-group form-submit">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
     <script src="{{ url_for('static', filename='js/edit_relatorio.js') }}"></script>
 </body>
 </html>

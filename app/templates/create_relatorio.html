@@ -4,57 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criar Relatório de Raio-X</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/create_relatorio.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Criar Relatório de Raio-X</h1>
-        <form method="POST" action="{{ url_for('main.create_relatorio') }}" enctype="multipart/form-data">
-            {{ form.hidden_tag() }}
+    <h1>Criar Relatório de Raio-X</h1>
+    <form method="POST" action="{{ url_for('main.create_relatorio') }}" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="form-row">
             <div class="form-group">
-                {{ form.paciente.label }}<br>
+                {{ form.paciente.label }}
                 {{ form.paciente(class="form-control") }}
             </div>
             <div class="form-group">
-                {{ form.tipo_exame.label }}<br>
+                {{ form.tipo_exame.label }}
                 {{ form.tipo_exame(class="form-control") }}
             </div>
+        </div>
+        <div class="form-row">
             <div class="form-group">
-                {{ form.data_exame.label }}<br>
+                {{ form.data_exame.label }}
                 {{ form.data_exame(class="form-control") }}
             </div>
             <div class="form-group">
-                {{ form.descricao.label }}<br>
-                {{ form.descricao(class="form-control") }}
-            </div>
-            <div class="form-group">
-                {{ form.imagem_url.label }}<br>
-                {{ form.imagem_url(class="form-control") }}
-            </div>
-            <div class="form-group">
-                {{ form.medico.label }}<br>
+                {{ form.medico.label }}
                 {{ form.medico(class="form-control") }}
             </div>
-            <h2>Resultados</h2>
-            <div id="resultados">
-                {% for resultado in form.resultados %}
-                <div class="form-group resultado-item">
-                    {{ resultado.area_examinada.label }}<br>
+        </div>
+        <div class="form-group">
+            {{ form.descricao.label }}
+            {{ form.descricao(class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.imagem_url.label }}
+            {{ form.imagem_url(class="form-control") }}
+        </div>
+        <h2>Resultados</h2>
+        <div id="resultados">
+            {% for resultado in form.resultados %}
+            <div class="resultado-item">
+                <div class="form-group">
+                    {{ resultado.area_examinada.label }}
                     {{ resultado.area_examinada(class="form-control") }}
-                    {{ resultado.resultado.label }}<br>
-                    {{ resultado.resultado(class="form-control") }}
-                    {{ resultado.observacoes.label }}<br>
-                    {{ resultado.observacoes(class="form-control") }}
-                    <button type="button" class="btn remove-resultado">Remover</button>
                 </div>
-                {% endfor %}
+                <div class="form-group">
+                    {{ resultado.resultado.label }}
+                    {{ resultado.resultado(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ resultado.observacoes.label }}
+                    {{ resultado.observacoes(class="form-control") }}
+                </div>
+                <button type="button" class="btn remove-resultado">Remover</button>
             </div>
-            <button type="button" id="add_resultado" class="btn">Adicionar Resultado</button>
-            <div class="form-group">
-                {{ form.submit(class="btn btn-primary") }}
-            </div>
-        </form>
-    </div>
+            {% endfor %}
+        </div>
+        <button type="button" id="add_resultado" class="btn">Adicionar Resultado</button>
+        <div class="form-group form-submit">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
     <script src="{{ url_for('static', filename='js/create_relatorio.js') }}"></script>
 </body>
 </html>

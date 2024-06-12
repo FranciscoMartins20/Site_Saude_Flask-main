@@ -9,9 +9,16 @@ body {
 
 h1 {
     text-align: center;
-    color: #333;
+    color: #f1c40f;
     font-weight: 700;
     margin-bottom: 40px;
+}
+
+h2 {
+    color: #333;
+    font-weight: 700;
+    margin-top: 40px;
+    margin-bottom: 20px;
 }
 
 .form-group {
@@ -57,6 +64,31 @@ h1 {
 
 .btn:hover {
     background-color: #f39c12; /* Amarelo mais escuro */
+}
+
+.resultado-item {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.resultado-item .form-group {
+    margin-bottom: 15px;
+}
+
+.resultado-item .btn.remove-resultado {
+    background-color: #e74c3c;
+    padding: 5px 10px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.resultado-item .btn.remove-resultado:hover {
+    background-color: #c0392b;
 }
 
 .form-submit {
